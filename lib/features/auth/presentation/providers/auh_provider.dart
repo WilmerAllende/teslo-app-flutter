@@ -28,7 +28,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void registerUser(String email, String password, String fullName) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    try {} catch (e) {
+
+    try {
+      final user = await authRepository.register(email, password, fullName);
+      _setLoggedRegister(user);
+    } catch (e) {
       logout("Error");
     }
   }
@@ -41,6 +45,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       user: user,
       errorMessage: "",
       authStatus: AuthStatus.authenticated,
+    );
+  }
+
+  void _setLoggedRegister(User user) {
+    //TODO: necesito guardar el token en el dispositivo
+    state = state.copyWith(
+      user: user,
+      errorMessage: "",
+      authStatus: AuthStatus.checking,
     );
   }
 

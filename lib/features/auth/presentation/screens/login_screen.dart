@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:teslo_shop/features/auth/presentation/providers/auh_provider.dart';
-import 'package:teslo_shop/features/auth/presentation/providers/user_register_provider.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
+
+import '../providers/providers.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

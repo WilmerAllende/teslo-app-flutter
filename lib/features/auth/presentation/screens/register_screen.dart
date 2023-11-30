@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:teslo_shop/features/auth/presentation/providers/user_register_provider.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
+import '../providers/providers.dart';
+
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
@@ -64,8 +66,19 @@ class RegisterScreen extends StatelessWidget {
 class _RegisterForm extends ConsumerWidget {
   const _RegisterForm();
 
+  void showSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final registerUserForm = ref.watch(registerUserFormProvider);
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
+      showSnackbar(context, next.errorMessage);
+    });
 
     final textStyles = Theme.of(context).textTheme;
 
@@ -77,28 +90,49 @@ class _RegisterForm extends ConsumerWidget {
           Text('Nueva cuenta', style: textStyles.titleMedium),
           const SizedBox(height: 50),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Nombre completo',
             keyboardType: TextInputType.emailAddress,
+            onChanged:
+                ref.read(registerUserFormProvider.notifier).onFullNameChange,
+            errorMessage: registerUserForm.isFormPosted
+                ? registerUserForm.fullName.errorMessage
+                : null,
           ),
           const SizedBox(height: 30),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Correo',
             keyboardType: TextInputType.emailAddress,
+            onChanged:
+                ref.read(registerUserFormProvider.notifier).onEmailChange,
+            errorMessage: registerUserForm.isFormPosted
+                ? registerUserForm.email.errorMessage
+                : null,
           ),
           const SizedBox(height: 30),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Contraseña',
             obscureText: true,
+            onChanged:
+                ref.read(registerUserFormProvider.notifier).onPasswordChanged,
+            errorMessage: registerUserForm.isFormPosted
+                ? registerUserForm.password.errorMessage
+                : null,
           ),
 
           const SizedBox(height: 30),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Repita la contraseña',
             obscureText: true,
+            onChanged: ref
+                .read(registerUserFormProvider.notifier)
+                .onRepeatPasswordChanged,
+            errorMessage: registerUserForm.isFormPosted
+                ? registerUserForm.repeatPassword.errorMessage
+                : null,
           ),
 
           const SizedBox(height: 20),
@@ -109,7 +143,9 @@ class _RegisterForm extends ConsumerWidget {
               child: CustomFilledButton(
                 text: 'Crear',
                 buttonColor: Colors.black,
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(registerUserFormProvider.notifier).onFormSubmit();
+                },
               )),
 
           //const Spacer( flex: 2 ),
