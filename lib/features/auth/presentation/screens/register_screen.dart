@@ -47,7 +47,7 @@ class RegisterScreen extends StatelessWidget {
             const SizedBox(height: 50),
 
             Container(
-              height: size.height, // 80 los dos sizebox y 100 el ícono
+              height: size.height - 200, // 80 los dos sizebox y 100 el ícono
               width: double.infinity,
               decoration: BoxDecoration(
                 color: scaffoldBackgroundColor,
@@ -83,12 +83,13 @@ class _RegisterForm extends ConsumerWidget {
     final textStyles = Theme.of(context).textTheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+      
+      padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 0),
       child: Column(
         children: [
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           Text('Nueva cuenta', style: textStyles.titleMedium),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
 
           CustomTextFormField(
             label: 'Nombre completo',

@@ -16,7 +16,8 @@ final loginFormProvider =
 // 2 como implementar notifider
 class LoginFormNotifier extends StateNotifier<LoginFormState> {
   final Function(String, String) loginUserCallback;
-  LoginFormNotifier({required this.loginUserCallback}) : super(LoginFormState());
+  LoginFormNotifier({required this.loginUserCallback})
+      : super(LoginFormState());
 
   onEmailChange(String value) {
     final newEmail = Email.dirty(value);
@@ -31,10 +32,19 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
         isValid: Formz.validate([state.email, newPassword]));
   }
 
-  onFormSubmit() async{
+  onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    await loginUserCallback( state.email.value, state.password.value );
+
+    state = state.copyWitch(
+      isPosting: true
+     );
+    await loginUserCallback(state.email.value, state.password.value);
+
+    state = state.copyWitch(
+      isPosting: false
+     );
+
   }
 
   _touchEveryField() {
@@ -47,7 +57,6 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
         password: password,
         isValid: Formz.validate([email, password]));
   }
-
 }
 
 class LoginFormState {
