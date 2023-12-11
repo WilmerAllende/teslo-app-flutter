@@ -8,7 +8,8 @@ import 'package:teslo_shop/features/shared/shared.dart';
 final productFormProvider = StateNotifierProvider.autoDispose
     .family<ProductFormNotifier, ProductFormState, Product>((ref, product) {
   // final createUpdateCallback = ref.watch(productsRepositoryProvider).createUpdateProduct;
-  final createUpdateCallback = ref.watch(productsProvider.notifier).createOrUpdateProduct;
+  final createUpdateCallback =
+      ref.watch(productsProvider.notifier).createOrUpdateProduct;
   return ProductFormNotifier(
     product: product,
     onSubmitCallback: createUpdateCallback,
@@ -117,6 +118,12 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
         Price.dirty(state.price.value),
         Stock.dirty(value)
       ]),
+    );
+  }
+
+  void updateProductImage(String path) {
+    state = state.copyWith(
+      images: [...state.images, path]
     );
   }
 
